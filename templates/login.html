@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form method="POST" action="{{ url_for('login_post') }}">
+        <form id="login-form" method="POST" action="{{ url_for('login_post') }}">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
@@ -28,5 +29,16 @@
             {% endif %}
         {% endwith %}
     </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var passwordField = document.getElementById('password');
+            var hashedPassword = CryptoJS.SHA256(passwordField.value).toString();
+            passwordField.value = hashedPassword;
+
+            this.submit();
+        });
+    </script>
 </body>
 </html>

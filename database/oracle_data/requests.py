@@ -1,8 +1,8 @@
 import sqlite3
 from functools import wraps
-from database.baseclasses import *
+from database.oracle_data.baseclasses import *
 
-ORACLE_DATA_PATH = "database/oracle_data.db"
+ORACLE_DATA_PATH = "database/oracle_data/oracle_data.db"
 
 
 def db_request(func):

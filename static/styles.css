@@ -113,6 +113,7 @@ th {
     min-width: 150px; /* Минимальная ширина столбца для заголовков */
 }
 
+/* Обновлено для кнопки комментариев */
 .comment-button {
     padding: 0.5rem;
     font-size: 1rem;
@@ -121,9 +122,10 @@ th {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    white-space: nowrap; /* Предотвращает перенос текста в кнопке */
     width: 100%; /* Устанавливает ширину кнопки равной ширине ячейки */
     box-sizing: border-box; /* Учитывает padding в ширину */
+    white-space: normal; /* Позволяет перенос текста на новую строку */
+    overflow-wrap: break-word; /* Переносит длинные слова */
 }
 
 /* Styles for select and option */

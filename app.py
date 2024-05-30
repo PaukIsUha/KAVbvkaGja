@@ -14,7 +14,9 @@ def login():
 def login_post():
     username = request.form.get('username')
     password = request.form.get('password')
-    if username == 'test' and password == '1234':
+
+    print(username, password)
+    if db.isin_users(login=username, hash_password=password):
         session['user'] = username
         return redirect(url_for('bases'))
     else:
@@ -45,7 +47,6 @@ def oracle():
         "name": filter_name,
         "vendor": filter_vendor,
     })
-    print(data)
     return render_template('table.html', data=data,
                            order_numbers=order_numbers,
                            pos=pos,
