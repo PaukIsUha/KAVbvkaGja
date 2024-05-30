@@ -7,8 +7,15 @@ class Orders:
     po: str
     name: str
     vendor: str
+    quantity: int
+    approval_date: datetime
+    promised_date: datetime
+    shipped: int
+    remainder: int
+    trans_data: str
+
     comment: str
-    count_fields = 5
+    count_fields = 11
 
     def __init__(self, data_arr: tuple):
         if len(data_arr) < self.count_fields:
@@ -19,7 +26,14 @@ class Orders:
         self.po = data_arr[2]
         self.name = data_arr[3]
         self.vendor = data_arr[4]
-        self.comment = data_arr[5] if len(data_arr) > self.count_fields else ''
+        self.quantity = 0 if data_arr[5] is None else data_arr[5]
+        self.approval_date = '' if data_arr[6] is None else data_arr[6]
+        self.promised_date = '' if data_arr[7] is None else data_arr[7]
+        self.shipped = 0 if data_arr[8] is None else data_arr[8]
+        self.remainder = None if self.quantity is None or self.shipped is None else self.quantity - self.shipped
+        self.trans_data = '' if data_arr[9] is None else data_arr[9]
+
+        self.comment = data_arr[10] if len(data_arr) > self.count_fields else ''
 
         if self.comment is None:
             self.comment = ''
@@ -31,6 +45,8 @@ class Orders:
     def __repr__(self):
         return f"Orders: (id: {self.id}, order_number: {self.order_number}, " \
                f"po: {self.po}, name: {self.name}, vendor: {self.vendor}, " \
+               f"quantity: {self.quantity}, approval_date: {self.approval_date}, promised_date: {self.promised_date}, " \
+               f"shipped: {self.shipped}, remainder: {self.remainder}, trans_data: {self.trans_data}, " \
                f"comment: {self.comment})"
 
 

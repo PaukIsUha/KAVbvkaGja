@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start Page</title>
+    <title>Select Database</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to the App</h1>
-        <button onclick="location.href='{{ url_for('start') }}'">Start</button>
+        <h2>Select a Database</h2>
+        <button onclick="location.href='{{ url_for('oracle') }}'">Oracle</button>
+        <button>swps</button>
+        <button>1C</button>
     </div>
 </body>
 </html>

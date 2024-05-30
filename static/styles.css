@@ -1,20 +1,72 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #121212;
+    color: #ffffff;
     margin: 0;
     padding: 0;
+}
+
+.login-container {
+    width: 300px;
+    padding: 2rem;
+    background-color: #1e1e1e;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    text-align: center;
+    margin: auto;
+}
+
+.login-container form {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100vh;
+    flex-direction: column;
+}
+
+.login-container label {
+    margin-top: 1rem;
+}
+
+.login-container input {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+.login-container button {
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.error-messages {
+    color: red;
+    list-style-type: none;
+    padding: 0;
 }
 
 .container {
+    text-align: center;
+    background-color: #1e1e1e;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    width: 80%;
+    margin: auto;
+}
+
+.container-top {
     width: 100%;
     padding: 2rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #1e1e1e;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     box-sizing: border-box;
+    margin-top: 0;
 }
 
 button {
@@ -25,44 +77,40 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin: 1rem;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
+.table-container {
+    overflow-x: auto; /* Горизонтальная прокрутка */
+    overflow-y: auto; /* Вертикальная прокрутка */
+    max-height: 80vh; /* Максимальная высота */
+    white-space: nowrap; /* Предотвращает перенос строк в таблице */
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
     table-layout: fixed;
+    min-width: 2000px; /* Увеличена минимальная ширина таблицы для предотвращения сжатия колонок */
 }
 
 th, td {
     padding: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid #444444;
     text-align: left;
-    word-wrap: break-word;
+    background-color: #333333;
+    word-wrap: break-word; /* Добавлено для переноса текста */
+    white-space: normal; /* Добавлено для переноса текста */
 }
 
 th {
     background-color: #007bff;
     color: white;
-}
-
-th, td:nth-child(1) {
-    width: 5%;
-}
-
-th, td:nth-child(2),
-th, td:nth-child(3),
-th, td:nth-child(4),
-th, td:nth-child(5) {
-    width: 15%;
-}
-
-th, td:nth-child(6) {
-    width: 35%;
+    min-width: 150px; /* Минимальная ширина столбца для заголовков */
 }
 
 .comment-button {
@@ -73,16 +121,44 @@ th, td:nth-child(6) {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    white-space: nowrap; /* Предотвращает перенос текста в кнопке */
+    width: 100%; /* Устанавливает ширину кнопки равной ширине ячейки */
+    box-sizing: border-box; /* Учитывает padding в ширину */
 }
 
+/* Styles for select and option */
+select {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    appearance: none; /* Удаляет стрелку по умолчанию */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+    width: 100%; /* Делает элементы select полной ширины */
+    box-sizing: border-box; /* Учитывает padding в ширину */
+}
+
+option {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+/* Modal styles */
 #commentModal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: #1e1e1e;
     padding: 2rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 10px;
     z-index: 1000;
 }
@@ -94,6 +170,10 @@ th, td:nth-child(6) {
 
 #commentModal textarea {
     margin-bottom: 1rem;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
 }
 
 #commentModal button {

@@ -8,36 +8,89 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container-top">
         <h1>Data Table</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Order Number</th>
-                    <th>PO</th>
-                    <th>Name</th>
-                    <th>Supplier</th>
-                    <th>Comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in data %}
-                <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.order_number }}</td>
-                    <td>{{ row.po }}</td>
-                    <td>{{ row.name }}</td>
-                    <td>{{ row.supplier }}</td>
-                    <td>
-                        <button class="comment-button" data-id="{{ row.id }}" data-comment="{{ row.comment }}">
-                            {{ row.comment or "Add Comment" }}
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <form id="filters" method="GET" action="{{ url_for('oracle') }}">
+            <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <select name="filter_order_number" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for order_number in order_numbers %}
+                                    <option value="{{ order_number }}" {% if request.args.get('filter_order_number') == order_number %}selected{% endif %}>{{ order_number }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select name="filter_po" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for po in pos %}
+                                    <option value="{{ po }}" {% if request.args.get('filter_po') == po %}selected{% endif %}>{{ po }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select name="filter_name" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for name in names %}
+                                    <option value="{{ name }}" {% if request.args.get('filter_name') == name %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select name="filter_vendor" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for vendor in vendors %}
+                                    <option value="{{ vendor }}" {% if request.args.get('filter_vendor') == vendor %}selected{% endif %}>{{ vendor }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>№ Заказа</th>
+                        <th>№ PO</th>
+                        <th>Наименование</th>
+                        <th>Поставщик</th>
+                        <th>Кол-во</th>
+                        <th>Дата</th>
+                        <th>Необходимая дата</th>
+                        <th>Отгружено</th>
+                        <th>Остаток</th>
+                        <th>Данные на ТС</th>
+                        <th>Комментарий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.order_number }}</td>
+                        <td>{{ row.po }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.vendor }}</td>
+                        <td>{{ row.quantity }}</td>
+                        <td>{{ row.approval_date }}</td>
+                        <td>{{ row.promised_date }}</td>
+                        <td>{{ row.shipped }}</td>
+                        <td>{{ row.remainder }}</td>
+                        <td>{{ row.trans_data }}</td>
+                        <td>
+                            <button type="button" class="comment-button" data-id="{{ row.id }}" data-comment="{{ row.comment }}">
+                                {{ row.comment or "Add Comment" }}
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </form>
     </div>
 
     <!-- Modal -->
