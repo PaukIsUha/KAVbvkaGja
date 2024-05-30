@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Table</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order Number</th>
+                    <th>PO</th>
+                    <th>Name</th>
+                    <th>Supplier</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.order_number }}</td>
+                    <td>{{ row.po }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.supplier }}</td>
+                    <td>
+                        <button class="comment-button" data-id="{{ row.id }}" data-comment="{{ row.comment }}">
+                            {{ row.comment or "Add Comment" }}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="commentModal" style="display:none;">
+        <form method="POST" action="{{ url_for('update_comment') }}">
+            <input type="hidden" name="data_id" id="data_id">
+            <label for="comment">Comment:</label>
+            <textarea name="comment" id="comment" rows="4" cols="50"></textarea>
+            <button type="submit">Submit</button>
+            <button type="button" id="closeModal">Close</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.comment-button').click(function() {
+                var dataId = $(this).data('id');
+                var comment = $(this).data('comment');
+                $('#data_id').val(dataId);
+                $('#comment').val(comment);
+                $('#commentModal').show();
+            });
+
+            $('#closeModal').click(function() {
+                $('#commentModal').hide();
+            });
+        });
+    </script>
+</body>
+</html>
