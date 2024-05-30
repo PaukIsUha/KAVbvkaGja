@@ -15,9 +15,11 @@ def login_post():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    print(username, password)
-    if db.isin_users(login=username, hash_password=password):
+    status, p_role = db.isin_users(login=username, hash_password=password)
+    print(status, p_role)
+    if status == db.ERRNO_USERS_DB.ok:
         session['user'] = username
+        session['role_id'] = p_role
         return redirect(url_for('bases'))
     else:
         flash('Invalid credentials', 'error')
@@ -40,6 +42,8 @@ def oracle():
     filter_name = request.args.get('filter_name')
     filter_vendor = request.args.get('filter_vendor')
 
+    role = session.get('role_id', 'user')
+
     order_numbers, pos, names, vendors = db.get_unique_cols_order()
     data = db.get_orders_last_comment(filters={
         "order_number": filter_order_number,
@@ -51,7 +55,8 @@ def oracle():
                            order_numbers=order_numbers,
                            pos=pos,
                            names=names,
-                           vendors=vendors)
+                           vendors=vendors,
+                           role=role)
 
 
 @app.route('/update_comment', methods=['POST'])

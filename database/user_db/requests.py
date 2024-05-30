@@ -1,8 +1,15 @@
 import sqlite3
 from functools import wraps
 from database.user_db.baseclasses import *
+from enum import Enum
 
 USER_DATA_PATH = "database/user_db/user_db.db"
+
+
+class ERRNO_USERS_DB(Enum):
+    ok = 0
+    invalid_login = 1
+    invalid_password = 2
 
 
 def db_request(func):
@@ -48,9 +55,16 @@ def isin_users(cursor, *args, **kwagrs):
     hash_password = kwagrs['hash_password']
 
     cursor.execute('''SELECT * FROM users WHERE name=?''', (login, ))
-    user = Users(cursor.fetchone())
+    db_user = cursor.fetchone()
+    if db_user is None:
+        return ERRNO_USERS_DB.invalid_login, None
 
-    return user.hash_password == hash_password
+    user = Users(db_user)
+
+    if user.hash_password == hash_password:
+        return ERRNO_USERS_DB.ok, user.role_id
+    else:
+        return ERRNO_USERS_DB.invalid_password, None
 
 
 @db_update
@@ -74,11 +88,11 @@ def add_user(cursor, *args, **kwagrs):
 # def calculate_sha256_hash(password):
 #     sha256_hash = hashlib.sha256(password.encode()).hexdigest()
 #     return sha256_hash
-
-
-# add_user(login='customer',
-#          hash_password=calculate_sha256_hash('SLB_P@ssw0rd'),
-#          role_id=User_role.owner.value)
+#
+#
+# add_user(login='test',
+#          hash_password=calculate_sha256_hash('1234'),
+#          role_id=User_role.user.value)
 
 
 

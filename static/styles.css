@@ -128,6 +128,12 @@ th {
     overflow-wrap: break-word; /* Переносит длинные слова */
 }
 
+/* Стили для отключенных кнопок */
+.comment-button.disabled {
+    background-color: #6c757d; /* Цвет фона для отключенной кнопки */
+    cursor: not-allowed; /* Указатель, показывающий, что кнопка неактивна */
+}
+
 /* Styles for select and option */
 select {
     background-color: #333333;

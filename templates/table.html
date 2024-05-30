@@ -81,7 +81,7 @@
                         <td>{{ row.remainder }}</td>
                         <td>{{ row.trans_data }}</td>
                         <td>
-                            <button type="button" class="comment-button" data-id="{{ row.id }}" data-comment="{{ row.comment }}">
+                            <button type="button" class="comment-button {% if role != 1 and role != 2 %}disabled{% endif %}" data-id="{{ row.id }}" data-comment="{{ row.comment }}" {% if role != 1 and role != 2 %}disabled{% endif %}>
                                 {{ row.comment or "Add Comment" }}
                             </button>
                         </td>
@@ -107,6 +107,9 @@
     <script>
         $(document).ready(function() {
             $('.comment-button').click(function() {
+                if ($(this).hasClass('disabled')) {
+                    return;
+                }
                 var dataId = $(this).data('id');
                 var comment = $(this).data('comment');
                 $('#data_id').val(dataId);
