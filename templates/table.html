@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Table</title>
+    <title>Oracle Table</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -11,6 +11,11 @@
     <div class="container-top">
         <h1>Data Table</h1>
         <form id="filters" method="GET" action="{{ url_for('oracle') }}">
+
+            <div class="record-count">
+                Displaying {{ data|length }} records
+            </div>
+
             <div class="table-container">
             <table>
                 <thead>
@@ -48,6 +53,14 @@
                                 {% endfor %}
                             </select>
                         </th>
+                        <th>
+                            <select name="filter_buyer" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for buyer in buyers %}
+                                    <option value="{{ buyer }}" {% if request.args.get('filter_buyer') == buyer %}selected{% endif %}>{{ buyer }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
                     </tr>
                 </thead>
                 <thead>
@@ -57,6 +70,7 @@
                         <th>№ PO</th>
                         <th>Наименование</th>
                         <th>Поставщик</th>
+                        <th>Buyer</th>
                         <th>Кол-во</th>
                         <th>Дата</th>
                         <th>Необходимая дата</th>
@@ -64,6 +78,7 @@
                         <th>Остаток</th>
                         <th>Данные на ТС</th>
                         <th>Комментарий</th>
+                        <th>Комментарий PC</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,15 +89,41 @@
                         <td>{{ row.po }}</td>
                         <td>{{ row.name }}</td>
                         <td>{{ row.vendor }}</td>
+                        <td>{{ row.buyer }}</td>
                         <td>{{ row.quantity }}</td>
                         <td>{{ row.approval_date }}</td>
                         <td>{{ row.promised_date }}</td>
-                        <td>{{ row.shipped }}</td>
+                        <td>
+                            {% if role == 1 or role == 2 %}
+                                <form></form>
+                                <form method="POST" action="{{ url_for('update_shipped_value') }}" class="inline-form">
+                                    <input type="hidden" name="data_id" value="{{ row.id }}">
+                                    <input type="number" name="shipped" value="{{ row.shipped }}" onchange="this.form.submit()">
+                                </form>
+                            {% else %}
+                                {{ row.shipped }}
+                            {% endif %}
+                        </td>
+
                         <td>{{ row.remainder }}</td>
-                        <td>{{ row.trans_data }}</td>
+                        <td>
+                             {% if role == 1 or role == 2 %}
+                                <form method="POST" action="{{ url_for('update_trans_data') }}" class="inline-form">
+                                    <input type="hidden" name="data_id" value="{{ row.id }}">
+                                    <input type="text" name="trans_data" value="{{ row.trans_data }}" onchange="this.form.submit()">
+                                </form>
+                             {% else %}
+                                {{ row.trans_data }}
+                             {% endif %}
+                        </td>
                         <td>
                             <button type="button" class="comment-button {% if role != 1 and role != 2 %}disabled{% endif %}" data-id="{{ row.id }}" data-comment="{{ row.comment }}" {% if role != 1 and role != 2 %}disabled{% endif %}>
                                 {{ row.comment or "Add Comment" }}
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="comment-pc-button {% if role != 1 and role != 3 %}disabled{% endif %}" data-id="{{ row.id }}" data-comment-pc="{{ row.comment_pc }}" {% if role != 1 and role != 3 %}disabled{% endif %}>
+                                {{ row.comment_pc or "Add Comment" }}
                             </button>
                         </td>
                     </tr>
@@ -104,23 +145,17 @@
         </form>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('.comment-button').click(function() {
-                if ($(this).hasClass('disabled')) {
-                    return;
-                }
-                var dataId = $(this).data('id');
-                var comment = $(this).data('comment');
-                $('#data_id').val(dataId);
-                $('#comment').val(comment);
-                $('#commentModal').show();
-            });
+    <!-- Modal для комментариев PC -->
+    <div id="commentPcModal" style="display:none;">
+        <form method="POST" action="{{ url_for('update_comment_pc') }}">
+            <input type="hidden" name="data_id" id="dataPc_id">
+            <label for="comment_pc">Comment PC:</label>
+            <textarea name="comment_pc" id="comment_pc" rows="4" cols="50"></textarea>
+            <button type="submit">Submit</button>
+            <button type="button" id="closePcModal">Close</button>
+        </form>
+    </div>
 
-            $('#closeModal').click(function() {
-                $('#commentModal').hide();
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

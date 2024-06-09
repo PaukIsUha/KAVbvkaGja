@@ -5,37 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <h1>Login</h1>
         <form id="login-form" method="POST" action="{{ url_for('login_post') }}">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+
+            <input type="hidden" id="hashed_password" name="password_hash">
+
             <button type="submit">Login</button>
         </form>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="error-messages">
-                {% for category, message in messages %}
-                    {% if category == 'error' %}
-                        <li>{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        <ul class="error-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </ul>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.4.2/sha.js"></script>
     <script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
-
             var passwordField = document.getElementById('password');
-            var hashedPassword = CryptoJS.SHA256(passwordField.value).toString();
-            passwordField.value = hashedPassword;
+            var hashedPasswordField = document.getElementById('hashed_password');
+
+            var shaObj = new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" });
+            shaObj.update(passwordField.value);
+            var hash = shaObj.getHash("HEX");
+
+            hashedPasswordField.value = hash;
+            passwordField.value = "";
 
             this.submit();
         });

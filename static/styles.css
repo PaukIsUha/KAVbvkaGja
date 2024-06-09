@@ -114,7 +114,7 @@ th {
 }
 
 /* Обновлено для кнопки комментариев */
-.comment-button {
+.comment-button, .comment-pc-button {
     padding: 0.5rem;
     font-size: 1rem;
     background-color: #007bff;
@@ -129,9 +129,25 @@ th {
 }
 
 /* Стили для отключенных кнопок */
-.comment-button.disabled {
+.comment-button.disabled, .comment-pc-button.disabled {
     background-color: #6c757d; /* Цвет фона для отключенной кнопки */
     cursor: not-allowed; /* Указатель, показывающий, что кнопка неактивна */
+}
+
+.inline-form {
+    display: inline; /* Отображение формы инлайн */
+    width: 100%; /* Ширина формы на 100% */
+}
+
+.inline-form input {
+    background-color: #444444;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin: 0;
+    box-sizing: border-box; /* Учитывает padding в ширину */
+    width: 100%; /* Ширина инпута на 100% */
 }
 
 /* Styles for select and option */
@@ -159,7 +175,7 @@ option {
 }
 
 /* Modal styles */
-#commentModal {
+#commentModal, #commentPcModal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -171,12 +187,12 @@ option {
     z-index: 1000;
 }
 
-#commentModal form {
+#commentModal form, #commentPcModal form {
     display: flex;
     flex-direction: column;
 }
 
-#commentModal textarea {
+#commentModal textarea, #commentPcModal textarea {
     margin-bottom: 1rem;
     background-color: #333333;
     color: #ffffff;
@@ -184,13 +200,20 @@ option {
     border-radius: 5px;
 }
 
-#commentModal button {
+#commentModal button, #commentPcModal button {
     padding: 0.5rem;
     font-size: 1rem;
     margin-top: 0.5rem;
 }
 
-#closeModal {
+#closeModal, #closePcModal {
     background-color: red;
     color: white;
+}
+
+.record-count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
 }
